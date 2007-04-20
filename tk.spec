@@ -1,7 +1,7 @@
 %define	name	tk
-%define	version	8.4.14
+%define	version	8.5a5
 %define	release	%mkrel 1
-%define major	8.4
+%define major	8.5
 %define libname	%mklibname %{name} %{major}
 
 Summary:	Tk GUI toolkit for Tcl
@@ -86,8 +86,6 @@ This package contains development files for %{name}.
 %prep
 
 %setup -q -n %{name}%{version}
-%patch0 -p0 -b .rpath
-%patch1 -p1 -b .soname
 
 %build
 
@@ -96,7 +94,7 @@ pushd unix
     	    test -f /usr/share/libtool/$f || continue
     	    find . -type f -name $f -exec cp /usr/share/libtool/$f \{\} \;
     done
-    autoconf-2.13
+    autoconf-2.5x
     %configure \
 	--enable-gcc \
 	--enable-threads \
