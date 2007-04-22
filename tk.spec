@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a5
-%define	release	%mkrel 1
+%define	release	%mkrel 2
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 
@@ -61,6 +61,7 @@ and Macintosh platforms.
 Summary:	Development files for %{name}
 Group:		Development/Other
 Requires:	%{libname} = %{version}
+Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 
