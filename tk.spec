@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a5
-%define	release	%mkrel 2
+%define	release	%mkrel 3
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 
@@ -14,7 +14,7 @@ URL:		http://tcl.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.bz2
 Patch0:		tk8.4.11-rpath.diff
 Patch1:		tk8.4.11-soname.diff
-Requires:	%{libname} = %{version}
+Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
 Buildroot:	%{_tmppath}/%{name}-%{version}
@@ -60,7 +60,8 @@ and Macintosh platforms.
 %package -n	%{libname}-devel 
 Summary:	Development files for %{name}
 Group:		Development/Other
-Requires:	%{libname} = %{version}
+Requires:	%{name} = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
 Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
