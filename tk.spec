@@ -1,6 +1,6 @@
 %define	name	tk
-%define	version	8.5a5
-%define	release	%mkrel 3
+%define	version	8.5a6
+%define	release	%mkrel 1
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 
@@ -164,6 +164,3 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 
 %clean
 rm -rf %{buildroot}
-
-
-
