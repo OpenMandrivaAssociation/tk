@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a6
-%define	release	%mkrel 1
+%define	release	%mkrel 2
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 
@@ -17,6 +17,7 @@ Patch1:		tk8.4.11-soname.diff
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
+Conflicts:	tk8.4-devel
 Buildroot:	%{_tmppath}/%{name}-%{version}
 
 %description
