@@ -1,8 +1,9 @@
 %define	name	tk
 %define	version	8.5a6
-%define	release	%mkrel 3
+%define	release	%mkrel 4
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
 
 Summary:	Tk GUI toolkit for Tcl
 Name:		%{name}
@@ -17,6 +18,7 @@ Patch1:		tk8.4.11-soname.diff
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
+BuildRequires:	chrpath
 Conflicts:	tk8.4-devel
 Buildroot:	%{_tmppath}/%{name}-%{version}
 
@@ -58,7 +60,7 @@ and Macintosh platforms.
 
 #--------------------------------------------------------------------
 
-%package -n	%{libname}-devel 
+%package -n	%{develname}
 Summary:	Development files for %{name}
 Group:		Development/Other
 Requires:	%{name} = %{version}-%{release}
@@ -66,12 +68,14 @@ Requires:	%{libname} = %{version}-%{release}
 Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
+Obsoletes:	%{libname}-devel
+Provides:	%{libname}-devel
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 This package contains development files for %{name}.
 
 
-%files -n %{libname}-devel -f %{libname}-devel.files
+%files -n %{develname} -f libtk%{major}.files
 %defattr(-,root,root)
 %dir %{_includedir}/tk%{version}
 %dir %{_includedir}/tk%{version}/compat
@@ -97,8 +101,8 @@ pushd unix
     	    test -f /usr/share/libtool/$f || continue
     	    find . -type f -name $f -exec cp /usr/share/libtool/$f \{\} \;
     done
-    autoconf-2.5x
-    %configure \
+    autoconf
+    %configure2_5x \
 	--enable-gcc \
 	--enable-threads \
 	--enable-64bit \
@@ -132,6 +136,8 @@ install -d %{buildroot}%{_includedir}/tk%{version}/unix
 install -m0644 compat/*.h %{buildroot}%{_includedir}/tk%{version}/compat/
 install -m0644 generic/*.h %{buildroot}%{_includedir}/tk%{version}/generic/
 install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
+# (tpg) compat issues
+ln -s %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
 pushd %{buildroot}%{_bindir}
     ln -sf wish* wish
@@ -162,6 +168,9 @@ fi
 
 # (fc) make sure .so files are writable by root
 chmod 755 %{buildroot}%{_libdir}/*.so*
+
+# (tpg) nuke rpath
+chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 
 %clean
 rm -rf %{buildroot}
