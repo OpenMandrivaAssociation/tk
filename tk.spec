@@ -75,7 +75,7 @@ Provides:	%{libname}-devel
 This package contains development files for %{name}.
 
 
-%files -n %{develname} -f libtk%{major}.files
+%files -n %{develname} -f %{_lib}tk%{major}.files
 %defattr(-,root,root)
 %dir %{_includedir}/tk%{version}
 %dir %{_includedir}/tk%{version}/compat
