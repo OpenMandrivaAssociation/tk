@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a6
-%define	release	%mkrel 4
+%define	release	%mkrel 5
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
