@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a6
-%define	release	%mkrel 5
+%define	release	%mkrel 6
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
@@ -11,7 +11,7 @@ Version:	%{version}
 Release:	%{release}
 License:	BSD
 Group:		System/Libraries
-URL:		http://tcl.sourceforge.net/
+URL:		http://tcl.tk
 Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.bz2
 Patch0:		tk8.4.11-rpath.diff
 Patch1:		tk8.4.11-soname.diff
@@ -36,7 +36,6 @@ and Macintosh platforms.
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 %{_mandir}/mann/*
-%exclude %{_libdir}/tk%{major}/pkgIndex.tcl
 
 #--------------------------------------------------------------------
 
@@ -55,10 +54,9 @@ and Macintosh platforms.
 
 %postun -p /sbin/ldconfig -n %{libname}
 
-%files -n %{libname}
+%files -n %{libname} -f %{libname}.files
 %defattr(-,root,root)
 %attr(0755,root,root) %{_libdir}/lib*.so.*
-%{_libdir}/tk%{major}/pkgIndex.tcl
 
 #--------------------------------------------------------------------
 
@@ -71,13 +69,12 @@ Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Obsoletes:	%{libname}-devel
-Provides:	%{libname}-devel
 
 %description -n	%{develname}
 This package contains development files for %{name}.
 
 
-%files -n %{develname}
+%files -n %{develname} -f %{develname}.files
 %defattr(-,root,root)
 %dir %{_includedir}/tk%{version}
 %dir %{_includedir}/tk%{version}/compat
@@ -90,10 +87,6 @@ This package contains development files for %{name}.
 %attr(0755,root,root) %{_libdir}/*.so
 %attr(0644,root,root) %{_libdir}/*.a
 %attr(0755,root,root) %{_libdir}/tkConfig.sh
-
-%ifarch x86_64
-%attr(0755,root,root) %{_prefix}/lib/tkConfig.sh
-%endif
 
 #--------------------------------------------------------------------
 %prep
@@ -166,10 +159,10 @@ perl -pi -e "s|`pwd`|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkCon
 
 # Arrangements for lib64 platforms
 echo "# placeholder" >> %{libname}.files
-echo "# placeholder" >> %{libname}-devel.files
+echo "# placeholder" >> %{develname}.files
 if [[ "%{_lib}" != "lib" ]]; then
     ln -s %{_libdir}/tkConfig.sh %{buildroot}%{_prefix}/lib/tkConfig.sh
-    echo "%{_prefix}/lib/tkConfig.sh" >> %{libname}-devel.files
+    echo "%{_prefix}/lib/tkConfig.sh" >> %{develname}.files
     echo "%{_libdir}/%{name}%{major}/pkgIndex.tcl" >> %{libname}.files
 fi
 
