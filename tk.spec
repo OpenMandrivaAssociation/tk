@@ -36,6 +36,7 @@ and Macintosh platforms.
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 %{_mandir}/mann/*
+%exclude %{_libdir}/tk%{major}/pkgIndex.tcl
 
 #--------------------------------------------------------------------
 
@@ -54,9 +55,10 @@ and Macintosh platforms.
 
 %postun -p /sbin/ldconfig -n %{libname}
 
-%files -n %{libname} -f %{libname}.files
+%files -n %{libname}
 %defattr(-,root,root)
 %attr(0755,root,root) %{_libdir}/lib*.so.*
+%{_libdir}/tk%{major}/pkgIndex.tcl
 
 #--------------------------------------------------------------------
 
@@ -75,7 +77,7 @@ Provides:	%{libname}-devel
 This package contains development files for %{name}.
 
 
-%files -n %{develname} -f %{_lib}tk%{major}.files
+%files -n %{develname}
 %defattr(-,root,root)
 %dir %{_includedir}/tk%{version}
 %dir %{_includedir}/tk%{version}/compat
@@ -88,6 +90,10 @@ This package contains development files for %{name}.
 %attr(0755,root,root) %{_libdir}/*.so
 %attr(0644,root,root) %{_libdir}/*.a
 %attr(0755,root,root) %{_libdir}/tkConfig.sh
+
+%ifarch x86_64
+%attr(0755,root,root) %{_prefix}/lib/tkConfig.sh
+%endif
 
 #--------------------------------------------------------------------
 %prep
@@ -136,8 +142,9 @@ install -d %{buildroot}%{_includedir}/tk%{version}/unix
 install -m0644 compat/*.h %{buildroot}%{_includedir}/tk%{version}/compat/
 install -m0644 generic/*.h %{buildroot}%{_includedir}/tk%{version}/generic/
 install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
+
 # (tpg) compat issues
-ln -s %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
+cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
 pushd %{buildroot}%{_bindir}
     ln -sf wish* wish
