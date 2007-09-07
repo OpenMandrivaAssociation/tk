@@ -1,6 +1,6 @@
 %define	name	tk
 %define	version	8.5a6
-%define	release	%mkrel 6
+%define	release	%mkrel 7
 %define major	8.5
 %define libname	%mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
@@ -13,8 +13,8 @@ License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.bz2
-Patch0:		tk8.4.11-rpath.diff
-Patch1:		tk8.4.11-soname.diff
+Patch0:		tk-8.5a6-rpath.patch
+Patch1:		tk-8.5a6-soname.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
@@ -92,6 +92,8 @@ This package contains development files for %{name}.
 %prep
 
 %setup -q -n %{name}%{version}
+%patch0 -p1
+%patch1 -p1
 
 %build
 
