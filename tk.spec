@@ -20,6 +20,7 @@ BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
 BuildRequires:	chrpath
 Conflicts:	tk8.4-devel
+Buildroot:	%{_tmppath}/%{name}-%{version}
 
 %description
 Tk is a X Windows widget set designed to work closely with the tcl
