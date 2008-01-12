@@ -1,20 +1,16 @@
-%define	name	tk
-%define	version	8.5a6
-%define	release	%mkrel 8
-%define major	8.5
-%define libname	%mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
+%define major		8.5
+%define libname		%mklibname %{name} %{major}
+%define develname	%mklibname %{name} -d
 
 Summary:	Tk GUI toolkit for Tcl
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		tk
+Version:	8.5.0
+Release:	%mkrel 1
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
-Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.bz2
-Patch0:		tk-8.5a6-rpath.patch
-Patch1:		tk-8.5a6-soname.patch
+Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
+Patch0:		tk-8.5.0-soname.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
@@ -29,16 +25,6 @@ featured GUI's in only a little more time then it takes to write a
 text based interface. Tcl/Tk applications can also be run on Windows
 and Macintosh platforms.
 
-%files
-%defattr(-,root,root)
-%{_bindir}/*
-%{_prefix}/lib/%{name}%{major}
-%{_mandir}/man1/*
-%{_mandir}/man3/*
-%{_mandir}/mann/*
-
-#--------------------------------------------------------------------
-
 %package -n	%{libname}
 Summary:	Shared libraries for %{name}
 Group:		System/Libraries
@@ -50,16 +36,6 @@ featured GUI's in only a little more time then it takes to write a
 text based interface. Tcl/Tk applications can also be run on Windows
 and Macintosh platforms.
 
-%post -p /sbin/ldconfig -n %{libname}
-
-%postun -p /sbin/ldconfig -n %{libname}
-
-%files -n %{libname} -f %{libname}.files
-%defattr(-,root,root)
-%attr(0755,root,root) %{_libdir}/lib*.so.*
-
-#--------------------------------------------------------------------
-
 %package -n	%{develname}
 Summary:	Development files for %{name}
 Group:		Development/Other
@@ -68,45 +44,24 @@ Requires:	%{libname} = %{version}-%{release}
 Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
-Obsoletes:	%{libname}-devel
+Obsoletes:	%{mklibname tk 8.5 -d}
+Obsoletes:	%{mklibname tk 8.4 -d}
 
 %description -n	%{develname}
 This package contains development files for %{name}.
 
-
-%files -n %{develname} -f %{develname}.files
-%defattr(-,root,root)
-%dir %{_includedir}/tk%{version}
-%dir %{_includedir}/tk%{version}/compat
-%dir %{_includedir}/tk%{version}/generic
-%dir %{_includedir}/tk%{version}/unix
-%attr(0644,root,root) %{_includedir}/tk%{version}/compat/*.h
-%attr(0644,root,root) %{_includedir}/tk%{version}/generic/*.h
-%attr(0644,root,root) %{_includedir}/tk%{version}/unix/*.h
-%attr(0644,root,root) %{_includedir}/*.h
-%attr(0755,root,root) %{_libdir}/*.so
-%attr(0644,root,root) %{_libdir}/*.a
-%attr(0755,root,root) %{_libdir}/tkConfig.sh
-
-#--------------------------------------------------------------------
 %prep
-
 %setup -q -n %{name}%{version}
 %patch0 -p1
-%patch1 -p1
 
 %build
-
 pushd unix
-    for f in config.guess config.sub ; do
-    	    test -f /usr/share/libtool/$f || continue
-    	    find . -type f -name $f -exec cp /usr/share/libtool/$f \{\} \;
-    done
     autoconf
     %configure2_5x \
 	--enable-gcc \
 	--enable-threads \
 	--enable-64bit \
+	--disable-rpath \
 	--with-tcl=%{_libdir} \
 	--includedir=%{_includedir}/tk%{version}
     %make
@@ -174,5 +129,36 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 # (tpg) nuke rpath
 chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 
+%post -p /sbin/ldconfig -n %{libname}
+
+%postun -p /sbin/ldconfig -n %{libname}
+
 %clean
 rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+%{_bindir}/*
+%{_prefix}/lib/%{name}%{major}
+%{_mandir}/man1/*
+%{_mandir}/man3/*
+%{_mandir}/mann/*
+
+%files -n %{libname} -f %{libname}.files
+%defattr(-,root,root)
+%attr(0755,root,root) %{_libdir}/lib*.so.*
+
+%files -n %{develname} -f %{develname}.files
+%defattr(-,root,root)
+%dir %{_includedir}/tk%{version}
+%dir %{_includedir}/tk%{version}/compat
+%dir %{_includedir}/tk%{version}/generic
+%dir %{_includedir}/tk%{version}/unix
+%attr(0644,root,root) %{_includedir}/tk%{version}/compat/*.h
+%attr(0644,root,root) %{_includedir}/tk%{version}/generic/*.h
+%attr(0644,root,root) %{_includedir}/tk%{version}/unix/*.h
+%attr(0644,root,root) %{_includedir}/*.h
+%attr(0755,root,root) %{_libdir}/*.so
+%attr(0644,root,root) %{_libdir}/*.a
+%attr(0755,root,root) %{_libdir}/tkConfig.sh
+
