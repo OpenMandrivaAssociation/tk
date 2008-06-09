@@ -129,9 +129,13 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 # (tpg) nuke rpath
 chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 
+%if %mdkversion < 200900
 %post -p /sbin/ldconfig -n %{libname}
+%endif
 
+%if %mdkversion < 200900
 %postun -p /sbin/ldconfig -n %{libname}
+%endif
 
 %clean
 rm -rf %{buildroot}
