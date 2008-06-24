@@ -10,7 +10,7 @@ License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
-Patch0:		tk-8.5.0-soname.patch
+Patch0:		tk-8.5.2-soname.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
