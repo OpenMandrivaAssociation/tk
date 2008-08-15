@@ -4,7 +4,7 @@
 
 Summary:	Tk GUI toolkit for Tcl
 Name:		tk
-Version:	8.5.3
+Version:	8.5.4
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Libraries
