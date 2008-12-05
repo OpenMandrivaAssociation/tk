@@ -1,27 +1,39 @@
-%define major		8.5
+%define rel	1
+%define pre	a3
+
+%if %pre
+%define release		%mkrel 0.%{pre}.%{rel}
+%define distname	%{name}%{version}%{pre}-src.tar.gz
+%define dirname		%{name}%{version}%{pre}
+%else
+%define release		%mkrel %{rel}
+%define distname	%{name}%{version}-src.tar.gz
+%define dirname		%{name}%{version}
+%endif
+
+%define major		8.6
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Summary:	Tk GUI toolkit for Tcl
 Name:		tk
-Version:	8.5.5
-Release:	%mkrel 1
+Version:	8.6
+Release:	%{release}
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
-Source0:	http://prdownloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
+Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Patch0:		tk-8.5.2-soname.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
 BuildRequires:	chrpath
-Conflicts:	tk8.4-devel
 Buildroot:	%{_tmppath}/%{name}-%{version}
 
 %description
 Tk is a X Windows widget set designed to work closely with the tcl
 scripting language. It allows you to write simple programs with full
-featured GUI's in only a little more time then it takes to write a
+featured GUIs in only a little more time then it takes to write a
 text based interface. Tcl/Tk applications can also be run on Windows
 and Macintosh platforms.
 
@@ -43,7 +55,6 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Requires:       libx11-devel
 Provides:	%{name}-devel = %{version}-%{release}
-Provides:	lib%{name}-devel = %{version}-%{release}
 Obsoletes:	%{mklibname tk 8.5 -d}
 Obsoletes:	%{mklibname tk 8.4 -d}
 
@@ -51,7 +62,7 @@ Obsoletes:	%{mklibname tk 8.4 -d}
 This package contains development files for %{name}.
 
 %prep
-%setup -q -n %{name}%{version}
+%setup -q -n %{dirname}
 %patch0 -p1
 
 %build
@@ -59,12 +70,11 @@ pushd unix
     autoconf
     %configure2_5x \
 	--enable-gcc \
-	--enable-threads \
 	--enable-64bit \
 	--disable-rpath \
 	--with-tcl=%{_libdir} \
 	--includedir=%{_includedir}/tk%{version}
-    %make
+    %make TK_LIBRARY=%{_datadir}/%{name}%{majorver}
 
     cp libtk%{major}.so libtk%{major}.so.0
 #    make test
@@ -79,7 +89,10 @@ if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
     EXTRA_TCLLIB_FILES="%{buildroot}%{_prefix}/lib/*"
 fi
 
-%makeinstall -C unix
+%makeinstall -C unix TK_LIBRARY=%{buildroot}%{_datadir}/%{name}%{major}
+
+# create the arch-dependent dir
+mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
 
 # fix libname
 mv %{buildroot}%{_libdir}/libtk%{major}.so %{buildroot}%{_libdir}/libtk%{major}.so.0
@@ -114,6 +127,9 @@ perl -pi -e "s|-L`pwd`/unix\b|-L%{_libdir}|g" %{buildroot}%{_libdir}/tkConfig.sh
 perl -pi -e "s|`pwd`/unix/lib|%{_libdir}/lib|g" %{buildroot}%{_libdir}/tkConfig.sh
 perl -pi -e "s|`pwd`|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkConfig.sh
 
+# and let it be found (we don't look in /usr/lib any more)
+ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name}Config.sh
+
 # Arrangements for lib64 platforms
 echo "# placeholder" >> %{libname}.files
 echo "# placeholder" >> %{develname}.files
@@ -143,7 +159,8 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{_prefix}/lib/%{name}%{major}
+%{_libdir}/%{name}%{major}
+%{_datadir}/%{name}%{major}
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 %{_mandir}/mann/*
