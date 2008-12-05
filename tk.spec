@@ -134,6 +134,7 @@ ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name
 echo "# placeholder" >> %{libname}.files
 echo "# placeholder" >> %{develname}.files
 if [[ "%{_lib}" != "lib" ]]; then
+    mkdir -p %{buildroot}%{_prefix}/lib
     ln -s %{_libdir}/tkConfig.sh %{buildroot}%{_prefix}/lib/tkConfig.sh
     echo "%{_prefix}/lib/tkConfig.sh" >> %{develname}.files
     echo "%{_libdir}/%{name}%{major}/pkgIndex.tcl" >> %{libname}.files
