@@ -1,5 +1,5 @@
 %define rel	1
-%define pre	a3
+%define pre	b1
 
 %if %pre
 %define release		%mkrel 0.%{pre}.%{rel}
@@ -24,8 +24,6 @@ Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Patch0:		tk-8.5.2-soname.patch
-# From upstream: fix GenericEvent Tcl_Panic error - AdamW 2008/12
-Patch1:		tk-8.6a3-panic.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
@@ -66,7 +64,6 @@ This package contains development files for %{name}.
 %prep
 %setup -q -n %{dirname}
 %patch0 -p1
-%patch1 -p1 -b .panic
 
 %build
 pushd unix
