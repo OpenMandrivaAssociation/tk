@@ -1,4 +1,4 @@
-%define rel	1
+%define rel	2
 %define pre	b1
 
 %if %pre
@@ -29,6 +29,7 @@ BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
 BuildRequires:	chrpath
 Buildroot:	%{_tmppath}/%{name}-%{version}
+Provides:	%{_bindir}/wish
 
 %description
 Tk is a X Windows widget set designed to work closely with the tcl
