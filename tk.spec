@@ -1,4 +1,4 @@
-%define rel	3
+%define rel	4
 %define pre	b1
 
 %if %pre
@@ -70,6 +70,7 @@ This package contains development files for %{name}.
 pushd unix
     autoconf
     %configure2_5x \
+	--enable-threads \
 	--enable-gcc \
 	--enable-64bit \
 	--disable-rpath \
