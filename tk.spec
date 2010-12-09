@@ -1,4 +1,4 @@
-%define rel	5
+%define rel	6
 %define pre	b1
 
 %if %pre
@@ -23,7 +23,8 @@ License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
-Patch0:		tk-8.5.2-soname.patch
+Patch0:		tk8.6b1-soname.patch
+Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	X11-devel
@@ -65,6 +66,7 @@ This package contains development files for %{name}.
 %prep
 %setup -q -n %{dirname}
 %patch0 -p1
+%patch1 -p1 -b .Xft
 
 %build
 pushd unix
