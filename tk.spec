@@ -1,4 +1,4 @@
-%define rel	6
+%define rel	7
 %define pre	b1
 
 %if %pre
@@ -27,7 +27,10 @@ Patch0:		tk8.6b1-soname.patch
 Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	tcl-devel >= %{version}
-BuildRequires:	X11-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxft-devel
+BuildRequires:	fontconfig-devel
+BuildRequires:	libxscrnsaver-devel
 BuildRequires:	chrpath
 Buildroot:	%{_tmppath}/%{name}-%{version}
 Provides:	%{_bindir}/wish
@@ -73,7 +76,6 @@ pushd unix
     autoconf
     %configure2_5x \
 	--enable-threads \
-	--enable-gcc \
 	--enable-64bit \
 	--disable-rpath \
 	--with-tcl=%{_libdir} \
