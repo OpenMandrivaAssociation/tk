@@ -4,11 +4,11 @@
 %if %pre
 %define release		%mkrel 0.%{pre}.%{rel}
 %define distname	%{name}%{version}%{pre}-src.tar.gz
-%define dirname		%{name}%{version}%{pre}
+%define dirname_	%{name}%{version}%{pre}
 %else
 %define release		%mkrel %{rel}
 %define distname	%{name}%{version}-src.tar.gz
-%define dirname		%{name}%{version}
+%define dirname_	%{name}%{version}
 %endif
 
 %define major		8.6
@@ -67,7 +67,7 @@ Obsoletes:	%{mklibname tk 8.4 -d}
 This package contains development files for %{name}.
 
 %prep
-%setup -q -n %{dirname}
+%setup -q -n %{dirname_}
 %patch0 -p1
 %patch1 -p1 -b .Xft
 
