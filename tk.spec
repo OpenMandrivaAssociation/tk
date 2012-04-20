@@ -1,5 +1,5 @@
-%define rel	8
-%define pre	b1
+%define rel	1
+%define pre	b2
 
 %if %pre
 %define release		%mkrel 0.%{pre}.%{rel}
@@ -32,7 +32,6 @@ BuildRequires:	libxft-devel
 BuildRequires:	fontconfig-devel
 BuildRequires:	libxscrnsaver-devel
 BuildRequires:	chrpath
-Buildroot:	%{_tmppath}/%{name}-%{version}
 Provides:	%{_bindir}/wish
 
 %description
@@ -68,7 +67,7 @@ This package contains development files for %{name}.
 
 %prep
 %setup -q -n %{dirname_}
-%patch0 -p1
+%patch0 -p1 -b .soname~
 %patch1 -p1 -b .Xft
 
 %build
@@ -143,7 +142,6 @@ if [[ "%{_lib}" != "lib" ]]; then
     mkdir -p %{buildroot}%{_prefix}/lib
     ln -s %{_libdir}/tkConfig.sh %{buildroot}%{_prefix}/lib/tkConfig.sh
     echo "%{_prefix}/lib/tkConfig.sh" >> %{develname}.files
-    echo "%{_libdir}/%{name}%{major}/pkgIndex.tcl" >> %{libname}.files
 fi
 
 # (fc) make sure .so files are writable by root
@@ -189,3 +187,4 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_libdir}/*.so
 %attr(0644,root,root) %{_libdir}/*.a
 %attr(0755,root,root) %{_libdir}/tkConfig.sh
+%attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
