@@ -1,0 +1,31 @@
+--- tk8.6b2/unix/configure.in.Xft	2011-08-05 21:18:31.000000000 +0200
++++ tk8.6b2/unix/configure.in	2012-04-20 19:17:21.127229457 +0200
+@@ -557,7 +557,7 @@ if test $tk_aqua = no; then
+ 	    tk_oldCFlags=$CFLAGS
+ 	    CFLAGS="$CFLAGS $XINCLUDES $XFT_CFLAGS"
+ 	    tk_oldLibs=$LIBS
+-	    LIBS="$tk_oldLIBS $XFT_LIBS $XLIBSW"
++	    LIBS="$tk_oldLIBS $XFT_LIBS $XLIBSW -lfreetype"
+ 	    AC_CHECK_HEADER(X11/Xft/Xft.h, [], [
+ 		found_xft=no
+ 	    ],[#include <X11/Xlib.h>])
+@@ -569,7 +569,7 @@ if test $tk_aqua = no; then
+ 	    tk_oldCFlags=$CFLAGS
+ 	    CFLAGS="$CFLAGS $XINCLUDES $XFT_CFLAGS"
+ 	    tk_oldLibs=$LIBS
+-	    LIBS="$tk_oldLIBS $XFT_LIBS $XLIBSW"
++	    LIBS="$tk_oldLIBS $XFT_LIBS $XLIBSW -lfreetype"
+ 	    AC_CHECK_LIB(Xft, XftFontOpen, [], [
+ 		found_xft=no
+ 	    ])
+--- tk8.6b2/unix/Makefile.in.Xft	2012-04-20 19:16:42.309228584 +0200
++++ tk8.6b2/unix/Makefile.in	2012-04-20 19:16:42.348228584 +0200
+@@ -291,7 +291,7 @@ REZ_SWITCHES = @REZ_FLAGS@ -i $(GENERIC_
+ 
+ # support for Xft:
+ XFT_CFLAGS		= @XFT_CFLAGS@
+-XFT_LIBS		= @XFT_LIBS@
++XFT_LIBS		= @XFT_LIBS@ -lfontconfig
+ 
+ #----------------------------------------------------------------
+ # The information below is modified by the configure script when

@@ -1,0 +1,22 @@
+--- tk8.6b2/unix/Makefile.in.soname~	2011-08-05 21:18:31.000000000 +0200
++++ tk8.6b2/unix/Makefile.in	2012-04-20 19:16:19.478228070 +0200
+@@ -725,7 +725,7 @@ install-binaries: $(TK_LIB_FILE) $(TK_ST
+ 	    echo "if {[catch {package present Tcl $(TCLVERSION)$(TCLPATCHL)}]} return";\
+ 	    relative=`echo | awk '{ORS=" "; split("$(TK_PKG_DIR)",a,"/"); for (f in a) {print ".."}}'`;\
+ 	    echo "package ifneeded Tk $(MAJOR_VERSION).$(MINOR_VERSION)$(PATCH_LEVEL)\
+-		[list load [file join \$$dir $${relative}$(TK_LIB_FILE)] Tk]";\
++		[list load [file join \$$dir $${relative}$(TK_LIB_FILE).0] Tk]";\
+ 	    ) > "$(PKG_INDEX)"; \
+ 	    fi
+ 	@echo "Installing $(LIB_FILE) to @DLL_INSTALL_DIR@/"
+--- tk8.6b2/unix/tcl.m4.soname~	2011-08-05 21:18:31.000000000 +0200
++++ tk8.6b2/unix/tcl.m4	2012-04-20 19:16:06.319227775 +0200
+@@ -1387,6 +1387,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
+ 	    # get rid of the warnings.
+ 	    #CFLAGS_OPTIMIZE="${CFLAGS_OPTIMIZE} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
+ 
++	    TK_SHLIB_LD_EXTRAS="-Wl,-soname,\${TK_LIB_FILE}.0"
++
+ 	    SHLIB_LD='${CC} -shared ${CFLAGS} ${LDFLAGS}'
+ 	    DL_OBJS="tclLoadDl.o"
+ 	    DL_LIBS="-ldl"
