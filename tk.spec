@@ -15,7 +15,7 @@
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
-Summary:	Tk GUI toolkit for Tcl
+Summary:	GUI toolkit for Tcl
 Name:		tk
 Version:	8.6
 Release:	%{release}
