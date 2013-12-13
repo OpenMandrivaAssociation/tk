@@ -1,15 +1,5 @@
-%define rel	5
-%define pre	b2
-
-%if %pre
-%define release		0.%{pre}.%{rel}
-%define distname	%{name}%{version}%{pre}-src.tar.gz
-%define dirname_	%{name}%{version}%{pre}
-%else
-%define release		%{rel}
 %define distname	%{name}%{version}-src.tar.gz
 %define dirname_	%{name}%{version}
-%endif
 
 %define major		8.6
 %define libname		%mklibname %{name} %{major}
@@ -17,17 +7,17 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6
-Release:	%{release}
+Version:	8.6.1
+Release:	1
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Source1:        icons.tcl
-Patch0:		tk8.6b1-soname.patch
 Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
-BuildRequires:	tcl-devel >= %{version}
+#tcl requires tcl?
+#BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xft)
 BuildRequires:	pkgconfig(fontconfig)
