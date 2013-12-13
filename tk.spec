@@ -56,7 +56,6 @@ This package contains development files for %{name}.
 
 %prep
 %setup -q -n %{dirname_}
-%patch0 -p1 -b .soname~
 %patch1 -p1 -b .Xft
 # Replace native icons.tcl - it contains  PNG data
 # obtained using old libpng and has problems with new libpng
