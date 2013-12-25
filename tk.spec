@@ -8,13 +8,14 @@
 Summary:	GUI toolkit for Tcl
 Name:		tk
 Version:	8.6.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Source1:        icons.tcl
 Source2:	tk.rpmlintrc
+Patch0:		tk8.6.1-soname.patch
 Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
 #tcl requires tcl?
@@ -57,6 +58,7 @@ This package contains development files for %{name}.
 
 %prep
 %setup -q -n %{dirname_}
+%patch0 -p1 -b .so
 %patch1 -p1 -b .Xft
 # Replace native icons.tcl - it contains  PNG data
 # obtained using old libpng and has problems with new libpng
