@@ -14,6 +14,7 @@ Group:		System/Libraries
 URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Source1:        icons.tcl
+Source2:	tk.rpmlintrc
 Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
 #tcl requires tcl?
