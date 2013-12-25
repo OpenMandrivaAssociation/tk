@@ -17,7 +17,7 @@ Source1:        icons.tcl
 Patch1:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{version}-%{release}
 #tcl requires tcl?
-#BuildRequires:	tcl-devel >= %{version}
+BuildRequires:	tcl-devel >= %{version}
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xft)
 BuildRequires:	pkgconfig(fontconfig)
