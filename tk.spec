@@ -155,7 +155,7 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_mandir}/mann/*
 
 %files -n %{libname} -f %{libname}.files
-%{_libdir}/lib*.so.%{major}*
+%{_libdir}/lib*%{major}.so.0*
 
 %files -n %{develname} -f %{develname}.files
 %dir %{_includedir}/tk%{version}
