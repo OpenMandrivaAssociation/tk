@@ -6,8 +6,8 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.4
-Release:	2
+Version:	8.6.5
+Release:	1
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
