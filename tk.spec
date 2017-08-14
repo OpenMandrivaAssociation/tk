@@ -6,7 +6,7 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.6
+Version:	8.6.7
 Release:	1
 License:	BSD
 Group:		System/Libraries
@@ -82,7 +82,6 @@ pushd unix
 popd
 
 %install
-rm -rf %{buildroot}
 
 # If %{_libdir} is not %{_prefix}/lib, then define EXTRA_TCLLIB_FILES
 # which contains actual non-architecture-dependent tcl code.
