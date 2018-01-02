@@ -1,12 +1,12 @@
 %define distname %{name}%{version}-src.tar.gz
 %define dirname_ %{name}%{version}
-%define major 8.6
+%define major %(echo %{version} |cut -d. -f1-2)
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.7
+Version:	8.6.8
 Release:	1
 License:	BSD
 Group:		System/Libraries
