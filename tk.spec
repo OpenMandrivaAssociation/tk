@@ -131,7 +131,6 @@ perl -pi -e "s|`pwd`|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkCon
 ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name}Config.sh
 
 # Arrangements for lib64 platforms
-echo "# placeholder" >> %{libname}.files
 echo "# placeholder" >> %{develname}.files
 if [[ "%{_lib}" != "lib" ]]; then
     mkdir -p %{buildroot}%{_prefix}/lib
@@ -153,7 +152,7 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_mandir}/man3/*
 %{_mandir}/mann/*
 
-%files -n %{libname} -f %{libname}.files
+%files -n %{libname}
 %{_libdir}/lib*%{major}.so.0*
 
 %files -n %{develname} -f %{develname}.files
