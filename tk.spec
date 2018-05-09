@@ -131,11 +131,9 @@ perl -pi -e "s|`pwd`|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkCon
 ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name}Config.sh
 
 # Arrangements for lib64 platforms
-echo "# placeholder" >> %{develname}.files
 if [[ "%{_lib}" != "lib" ]]; then
     mkdir -p %{buildroot}%{_prefix}/lib
     ln -s %{_libdir}/tkConfig.sh %{buildroot}%{_prefix}/lib/tkConfig.sh
-    echo "%{_prefix}/lib/tkConfig.sh" >> %{develname}.files
 fi
 
 # (fc) make sure .so files are writable by root
@@ -155,7 +153,7 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %files -n %{libname}
 %{_libdir}/lib*%{major}.so.0*
 
-%files -n %{develname} -f %{develname}.files
+%files -n %{develname}
 %dir %{_includedir}/tk%{version}
 %dir %{_includedir}/tk%{version}/compat
 %dir %{_includedir}/tk%{version}/generic
@@ -167,4 +165,7 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/tkConfig.sh
+%if "%{_libdir}" != "%{_prefix}/lib"
+%{_prefix}/lib/tkConfig.sh
+%endif
 %{_libdir}/pkgconfig/*.pc
