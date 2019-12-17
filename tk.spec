@@ -6,8 +6,8 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.8
-Release:	4
+Version:	8.6.10
+Release:	1
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
@@ -37,7 +37,7 @@ and Macintosh platforms.
 Summary:	Shared libraries for %{name}
 Group:		System/Libraries
 
-%description -n	%{libname}
+%description -n %{libname}
 Tk is a X Windows widget set designed to work closely with the tcl
 scripting language. It allows you to write simple programs with full
 featured GUI's in only a little more time then it takes to write a
@@ -52,13 +52,12 @@ Requires:	%{libname} = %{EVRD}
 Requires:	pkgconfig(x11)
 Provides:	%{name}-devel = %{version}-%{release}
 
-%description -n	%{develname}
+%description -n %{develname}
 This package contains development files for %{name}.
 
 %prep
-%setup -q -n %{dirname_}
-%patch0 -p1 -b .so
-%patch1 -p1 -b .Xft
+%autosetup -n %{dirname_} -p1
+
 # Replace native icons.tcl - it contains  PNG data
 # obtained using old libpng and has problems with new libpng
 # The new one contains PNG data created using
@@ -66,7 +65,7 @@ This package contains development files for %{name}.
 cp -f %{SOURCE1} library
 
 %build
-pushd unix
+cd unix
     autoconf
     %configure \
 	--enable-threads \
@@ -75,11 +74,11 @@ pushd unix
 	--with-tcl=%{_libdir} \
 	--includedir=%{_includedir}/tk%{version}
 
-    %make CFLAGS="%{optflags}" TK_LIBRARY=%{_datadir}/%{name}%{majorver}
+    %make_build CFLAGS="%{optflags}" TK_LIBRARY=%{_datadir}/%{name}%{majorver}
 
     cp libtk%{major}.so libtk%{major}.so.0
 #    make test
-popd
+cd -
 
 %install
 
@@ -89,7 +88,7 @@ if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
     EXTRA_TCLLIB_FILES="%{buildroot}%{_prefix}/lib/*"
 fi
 
-%makeinstall -C unix TK_LIBRARY=%{buildroot}%{_datadir}/%{name}%{major}
+%make_install -C unix TK_LIBRARY=%{buildroot}%{_datadir}/%{name}%{major}
 
 # create the arch-dependent dir
 mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
@@ -109,29 +108,29 @@ install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
 # (tpg) compat issues
 cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
-pushd %{buildroot}%{_bindir}
+cd %{buildroot}%{_bindir}
     ln -sf wish* wish
-popd
+cd -
 
-pushd %{buildroot}%{_libdir}
+cd %{buildroot}%{_libdir}
 cat > lib%{name}.so << EOF
 /* GNU ld script
    We want -l%{name} to include the actual system library,
    which is lib%{name}%{major}.so.0  */
 INPUT ( -l%{name}%{major} )
 EOF
-popd
+cd -
 
 # fix config script
-perl -pi -e "s|-L`pwd`/unix\b|-L%{_libdir}|g" %{buildroot}%{_libdir}/tkConfig.sh
-perl -pi -e "s|`pwd`/unix/lib|%{_libdir}/lib|g" %{buildroot}%{_libdir}/tkConfig.sh
-perl -pi -e "s|`pwd`|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkConfig.sh
+perl -pi -e "s|-L$(pwd)/unix\b|-L%{_libdir}|g" %{buildroot}%{_libdir}/tkConfig.sh
+perl -pi -e "s|$(pwd)/unix/lib|%{_libdir}/lib|g" %{buildroot}%{_libdir}/tkConfig.sh
+perl -pi -e "s|$(pwd)|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkConfig.sh
 
 # and let it be found (we don't look in /usr/lib any more)
 ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name}Config.sh
 
 # Arrangements for lib64 platforms
-if [[ "%{_lib}" != "lib" ]]; then
+if [ "%{_lib}" != "lib" ]; then
     mkdir -p %{buildroot}%{_prefix}/lib
     ln -s %{_libdir}/tkConfig.sh %{buildroot}%{_prefix}/lib/tkConfig.sh
 fi
