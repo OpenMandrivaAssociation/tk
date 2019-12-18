@@ -103,9 +103,6 @@ ln -snf libtk%{major}.so.0 %{buildroot}%{_libdir}/libtk%{major}.so
 # for linking with -l%%{name}
 ln -s lib%{name}%{major}.so %{buildroot}%{_libdir}/lib%{name}.so
 
-# (tpg) compat issues
-cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
-
 mkdir -p %{buildroot}%{_includedir}/%{name}-private/{generic/ttk,unix}
 find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}%{_includedir}/%{name}-private/'{}' ';'
 ( cd %{buildroot}/%{_includedir}
