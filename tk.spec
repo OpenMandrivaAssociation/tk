@@ -103,22 +103,14 @@ ln -snf libtk%{major}.so.0 %{buildroot}%{_libdir}/libtk%{major}.so
 # for linking with -l%%{name}
 ln -s lib%{name}%{major}.so %{buildroot}%{_libdir}/lib%{name}.so
 
-# install all headers
-install -d %{buildroot}%{_includedir}/tk%{version}/compat
-install -d %{buildroot}%{_includedir}/tk%{version}/generic
-install -d %{buildroot}%{_includedir}/tk%{version}/unix
-install -m0644 compat/*.h %{buildroot}%{_includedir}/tk%{version}/compat/
-install -m0644 generic/*.h %{buildroot}%{_includedir}/tk%{version}/generic/
-install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
-
 # (tpg) compat issues
 cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
-mkdir -p %{buildroot}/%{_includedir}/%{name}-private/{generic/ttk,unix}
-find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}/%{_includedir}/%{name}-private/'{}' ';'
+mkdir -p %{buildroot}%{_includedir}/%{name}-private/{generic/ttk,unix}
+find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}%{_includedir}/%{name}-private/'{}' ';'
 ( cd %{buildroot}/%{_includedir}
   for i in *.h ; do
-    [ -f %{buildroot}/%{_includedir}/%{name}-private/generic/$i ] && ln -sf ../../$i %{buildroot}/%{_includedir}/%{name}-private/generic ;
+    [ -f %{buildroot}%{_includedir}/%{name}-private/generic/$i ] && ln -sf ../../$i %{buildroot}%{_includedir}/%{name}-private/generic ;
   done
 )
 
@@ -141,25 +133,18 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 
 %files
-%{_bindir}/*
+%{_bindir}/wish*
 %{_libdir}/%{name}%{major}
 %{_datadir}/%{name}%{major}
+%exclude %{_datadir}/%{name}%{major}/tkAppInit.c
 %{_mandir}/man1/*
-%{_mandir}/man3/*
 %{_mandir}/mann/*
 
 %files -n %{libname}
 %{_libdir}/lib*%{major}.so.0*
 
 %files -n %{develname}
-%dir %{_includedir}/tk%{version}
-%dir %{_includedir}/tk%{version}/compat
-%dir %{_includedir}/tk%{version}/generic
-%dir %{_includedir}/tk%{version}/unix
-%{_includedir}/tk%{version}/compat/*.h
-%{_includedir}/tk%{version}/generic/*.h
-%{_includedir}/tk%{version}/unix/*.h
-%{_includedir}/*.h
+%{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/tkConfig.sh
@@ -167,3 +152,5 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_prefix}/lib/tkConfig.sh
 %endif
 %{_libdir}/pkgconfig/*.pc
+%{_datadir}/%{name}%{major}/tkAppInit.c
+%{_mandir}/man3/*
