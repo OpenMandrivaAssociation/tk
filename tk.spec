@@ -14,8 +14,10 @@ URL:		http://tcl.tk
 Source0:	http://downloads.sourceforge.net/tcl/%{distname}
 Source1:	icons.tcl
 Source2:	tk.rpmlintrc
-Patch0:		tk8.6.1-soname.patch
-Patch1:		tk8.6b1-fix_Xft_linkage.patch
+Patch0:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-make.patch
+Patch1:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-conf.patch
+Patch2:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.7-no-fonts-fix.patch
+Patch3:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
 #tcl requires tcl?
 BuildRequires:	tcl-devel >= %{version}
@@ -74,7 +76,7 @@ cd unix
 	--with-tcl=%{_libdir} \
 	--includedir=%{_includedir}/tk%{version}
 
-    %make_build CFLAGS="%{optflags}" TK_LIBRARY=%{_datadir}/%{name}%{majorver}
+    %make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
 
     cp libtk%{major}.so libtk%{major}.so.0
 #    make test
@@ -88,7 +90,7 @@ if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
     EXTRA_TCLLIB_FILES="%{buildroot}%{_prefix}/lib/*"
 fi
 
-%make_install -C unix TK_LIBRARY=%{buildroot}%{_datadir}/%{name}%{major}
+%make_install -C unix TK_LIBRARY="%{_datadir}/%{name}%{major}"
 
 # create the arch-dependent dir
 mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
@@ -122,9 +124,7 @@ EOF
 cd -
 
 # fix config script
-perl -pi -e "s|-L$(pwd)/unix\b|-L%{_libdir}|g" %{buildroot}%{_libdir}/tkConfig.sh
-perl -pi -e "s|$(pwd)/unix/lib|%{_libdir}/lib|g" %{buildroot}%{_libdir}/tkConfig.sh
-perl -pi -e "s|$(pwd)|%{_includedir}/tk%{version}|g" %{buildroot}%{_libdir}/tkConfig.sh
+sed -i -e "s|$(pwd)/unix|%{_libdir}|; s|$(pwd)|%{_includedir}/%{name}-private|" %{buildroot}%{_libdir}/%{name}Config.sh
 
 # and let it be found (we don't look in /usr/lib any more)
 ln -s %{_libdir}/%{name}Config.sh %{buildroot}/%{_libdir}/%{name}%{major}/%{name}Config.sh
