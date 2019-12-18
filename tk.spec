@@ -95,9 +95,14 @@ fi
 # create the arch-dependent dir
 mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
 
+ln -s wish%{major} %{buildroot}%{_bindir}/wish
+
 # fix libname
 mv %{buildroot}%{_libdir}/libtk%{major}.so %{buildroot}%{_libdir}/libtk%{major}.so.0
 ln -snf libtk%{major}.so.0 %{buildroot}%{_libdir}/libtk%{major}.so
+
+# for linking with -l%%{name}
+ln -s lib%{name}%{major}.so %{buildroot}%{_libdir}/lib%{name}.so
 
 # install all headers
 install -d %{buildroot}%{_includedir}/tk%{version}/compat
@@ -110,18 +115,13 @@ install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
 # (tpg) compat issues
 cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
-cd %{buildroot}%{_bindir}
-    ln -sf wish* wish
-cd -
-
-cd %{buildroot}%{_libdir}
-cat > lib%{name}.so << EOF
-/* GNU ld script
-   We want -l%{name} to include the actual system library,
-   which is lib%{name}%{major}.so.0  */
-INPUT ( -l%{name}%{major} )
-EOF
-cd -
+mkdir -p %{buildroot}%{_includedir}/%{name}-private/{generic/ttk,unix}
+find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}%{_includedir}/%{name}-private/'{}' ';'
+( cd %{buildroot}%{_includedir}
+	for i in *.h ; do
+	    [ -f %{buildroot}%{_includedir}/%{name}-private/generic/$i ] && ln -sf ../../$i %{buildroot}%{_includedir}/%{name}-private/generic ;
+	done
+)
 
 # fix config script
 sed -i -e "s|$(pwd)/unix|%{_libdir}|; s|$(pwd)|%{_includedir}/%{name}-private|" %{buildroot}%{_libdir}/%{name}Config.sh
