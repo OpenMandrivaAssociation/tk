@@ -79,7 +79,6 @@ cd unix
     %make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
 
     cp libtk%{major}.so libtk%{major}.so.0
-#    make test
 cd -
 
 %install
@@ -90,7 +89,7 @@ if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
     EXTRA_TCLLIB_FILES="%{buildroot}%{_prefix}/lib/*"
 fi
 
-%make_install -C unix TK_LIBRARY="%{_datadir}/%{name}%{major}"
+%make_install -C unix INSTALL_ROOT=%{buildroot} TK_LIBRARY="%{_datadir}/%{name}%{major}"
 
 # create the arch-dependent dir
 mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
@@ -115,12 +114,12 @@ install -m0644 unix/*.h %{buildroot}%{_includedir}/tk%{version}/unix/
 # (tpg) compat issues
 cp -f %{buildroot}%{_includedir}/tk%{version}/unix/tkUnixPort.h %{buildroot}%{_includedir}/tk%{version}/generic/
 
-mkdir -p %{buildroot}%{_includedir}/%{name}-private/{generic/ttk,unix}
-find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}%{_includedir}/%{name}-private/'{}' ';'
-( cd %{buildroot}%{_includedir}
-	for i in *.h ; do
-	    [ -f %{buildroot}%{_includedir}/%{name}-private/generic/$i ] && ln -sf ../../$i %{buildroot}%{_includedir}/%{name}-private/generic ;
-	done
+mkdir -p %{buildroot}/%{_includedir}/%{name}-private/{generic/ttk,unix}
+find generic unix -name "*.h" -exec cp -p '{}' %{buildroot}/%{_includedir}/%{name}-private/'{}' ';'
+( cd %{buildroot}/%{_includedir}
+  for i in *.h ; do
+    [ -f %{buildroot}/%{_includedir}/%{name}-private/generic/$i ] && ln -sf ../../$i %{buildroot}/%{_includedir}/%{name}-private/generic ;
+  done
 )
 
 # fix config script
