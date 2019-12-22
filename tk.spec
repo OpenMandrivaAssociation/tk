@@ -68,10 +68,13 @@ cp -f %{SOURCE1} library
 
 %build
 cd unix
+%config_update
     autoconf
     %configure \
 	--enable-threads \
+%ifnarch %{ix86}
 	--enable-64bit \
+%endif
 	--disable-rpath \
 	--with-tcl=%{_libdir} \
 	--includedir=%{_includedir}/tk%{version}
