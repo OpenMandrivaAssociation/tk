@@ -76,8 +76,7 @@ cd unix
 	--enable-64bit \
 %endif
 	--disable-rpath \
-	--with-tcl=%{_libdir} \
-	--includedir=%{_includedir}/tk%{version}
+	--with-tcl=%{_libdir}
 
     %make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
 
@@ -144,7 +143,7 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_libdir}/lib*%{major}.so.0*
 
 %files -n %{develname}
-%{_includedir}/*
+%{_includedir}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/tkConfig.sh
