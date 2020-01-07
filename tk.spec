@@ -144,6 +144,8 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 
 %files -n %{develname}
 %{_includedir}/*.h
+%dir %{_includedir}/tk-private
+%{_includedir}/tk-private/*
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/tkConfig.sh
