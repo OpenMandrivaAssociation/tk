@@ -7,7 +7,7 @@
 Summary:	GUI toolkit for Tcl
 Name:		tk
 Version:	8.6.10
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
@@ -17,7 +17,9 @@ Source2:	tk.rpmlintrc
 Patch0:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-make.patch
 Patch1:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-conf.patch
 Patch2:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.7-no-fonts-fix.patch
-Patch3:		tk8.6b1-fix_Xft_linkage.patch
+# # https://core.tcl-lang.org/tk/tktview/dccd82bdc70dc25bb6709a6c14880a92104dda43
+Patch3:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-font-sizes-fix.patch
+Patch4:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
 #tcl requires tcl?
 BuildRequires:	tcl-devel >= %{version}
@@ -79,8 +81,6 @@ cd unix
 	--with-tcl=%{_libdir}
 
     %make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
-
-    cp libtk%{major}.so libtk%{major}.so.0
 cd -
 
 %install
@@ -97,10 +97,6 @@ fi
 mkdir -p %{buildroot}%{_libdir}/%{name}%{major}
 
 ln -s wish%{major} %{buildroot}%{_bindir}/wish
-
-# fix libname
-mv %{buildroot}%{_libdir}/libtk%{major}.so %{buildroot}%{_libdir}/libtk%{major}.so.0
-ln -snf libtk%{major}.so.0 %{buildroot}%{_libdir}/libtk%{major}.so
 
 # for linking with -l%%{name}
 ln -s lib%{name}%{major}.so %{buildroot}%{_libdir}/lib%{name}.so
@@ -129,7 +125,7 @@ fi
 chmod 755 %{buildroot}%{_libdir}/*.so*
 
 # (tpg) nuke rpath
-chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
+chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so
 
 %files
 %{_bindir}/wish*
@@ -140,13 +136,13 @@ chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so.0
 %{_mandir}/mann/*
 
 %files -n %{libname}
-%{_libdir}/lib*%{major}.so.0*
+%{_libdir}/lib*%{major}.so
 
 %files -n %{develname}
 %{_includedir}/*.h
 %dir %{_includedir}/tk-private
 %{_includedir}/tk-private/*
-%{_libdir}/*.so
+%{_libdir}/libtk.so
 %{_libdir}/*.a
 %{_libdir}/tkConfig.sh
 %if "%{_libdir}" != "%{_prefix}/lib"
