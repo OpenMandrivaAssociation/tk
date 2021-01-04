@@ -6,8 +6,8 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.10
-Release:	2
+Version:	8.6.11
+Release:	1
 License:	BSD
 Group:		System/Libraries
 URL:		http://tcl.tk
@@ -16,7 +16,6 @@ Source1:	icons.tcl
 Source2:	tk.rpmlintrc
 Patch0:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-make.patch
 Patch1:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-conf.patch
-Patch2:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.7-no-fonts-fix.patch
 # # https://core.tcl-lang.org/tk/tktview/dccd82bdc70dc25bb6709a6c14880a92104dda43
 Patch3:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-font-sizes-fix.patch
 Patch4:		tk8.6b1-fix_Xft_linkage.patch
