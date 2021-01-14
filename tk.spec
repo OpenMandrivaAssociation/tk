@@ -1,12 +1,12 @@
 %define distname %{name}%{version}-src.tar.gz
-%define dirname_ %{name}%{version}
+%define dirname_ %{name}%(echo %{version}|cut -d. -f1-3)
 %define major %(echo %{version} |cut -d. -f1-2)
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.11
+Version:	8.6.11.1
 Release:	1
 License:	BSD
 Group:		System/Libraries
@@ -20,8 +20,7 @@ Patch1:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-conf.patch
 Patch3:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-font-sizes-fix.patch
 Patch4:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
-#tcl requires tcl?
-BuildRequires:	tcl-devel >= %{version}
+BuildRequires:	tcl-devel >= %(echo %{version} |cut -d. -f1-3)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xft)
 BuildRequires:	pkgconfig(fontconfig)
