@@ -1,4 +1,5 @@
 %define major %(echo %{version} |cut -d. -f1-2)
+%define oldlibname %mklibname %{name} %{major}
 %define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
 
@@ -49,6 +50,7 @@ and Macintosh platforms.
 %package -n %{libname}
 Summary:	Shared libraries for %{name}
 Group:		System/Libraries
+Obsoletes:	%{oldlibname} < %{EVRD}
 
 %description -n %{libname}
 Tk is a X Windows widget set designed to work closely with the tcl
