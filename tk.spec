@@ -1,23 +1,24 @@
-%define distname %{name}%{version}-src.tar.gz
-%define dirname_ %{name}%(echo %{version}|cut -d. -f1-3)
 %define major %(echo %{version} |cut -d. -f1-2)
-%define libname %mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
+%define libname %mklibname %{name}
+%define devname %mklibname %{name} -d
+
+
+%define dirname_ %{name}%(echo %{version}|cut -d. -f1-3)
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	8.6.11.1
+Version:	8.6.12
 Release:	1
 License:	BSD
 Group:		System/Libraries
-URL:		http://tcl.tk
-Source0:	http://downloads.sourceforge.net/tcl/%{distname}
+URL:		https://tcl.tk
+Source0:        https://downloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
 Source1:	icons.tcl
 Source2:	tk.rpmlintrc
-Patch0:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-make.patch
-Patch1:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-conf.patch
+Patch0:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.12-make.patch
+Patch1:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.12-conf.patch
 # # https://core.tcl-lang.org/tk/tktview/dccd82bdc70dc25bb6709a6c14880a92104dda43
-Patch3:		https://src.fedoraproject.org/rpms/tk/raw/master/f/tk-8.6.10-font-sizes-fix.patch
+Patch3:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.10-font-sizes-fix.patch
 Patch4:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
 BuildRequires:	tcl-devel >= %(echo %{version} |cut -d. -f1-3)
@@ -35,6 +36,16 @@ featured GUIs in only a little more time then it takes to write a
 text based interface. Tcl/Tk applications can also be run on Windows
 and Macintosh platforms.
 
+%files
+%{_bindir}/wish*
+%{_libdir}/%{name}%{major}
+%{_datadir}/%{name}%{major}
+%exclude %{_datadir}/%{name}%{major}/tkAppInit.c
+%{_mandir}/man1/*
+%{_mandir}/mann/*
+
+#--------------------------------------------------------------------
+
 %package -n %{libname}
 Summary:	Shared libraries for %{name}
 Group:		System/Libraries
@@ -46,7 +57,12 @@ featured GUI's in only a little more time then it takes to write a
 text based interface. Tcl/Tk applications can also be run on Windows
 and Macintosh platforms.
 
-%package -n %{develname}
+%files -n %{libname}
+%{_libdir}/lib*%{major}.so
+
+#--------------------------------------------------------------------
+
+%package -n %{devname}
 Summary:	Development files for %{name}
 Group:		Development/Other
 Requires:	%{name} = %{EVRD}
@@ -54,11 +70,27 @@ Requires:	%{libname} = %{EVRD}
 Requires:	pkgconfig(x11)
 Provides:	%{name}-devel = %{version}-%{release}
 
-%description -n %{develname}
+%description -n %{devname}
 This package contains development files for %{name}.
 
+%files -n %{devname}
+%{_includedir}/*.h
+%dir %{_includedir}/tk-private
+%{_includedir}/tk-private/*
+%{_libdir}/libtk.so
+%{_libdir}/*.a
+%{_libdir}/tkConfig.sh
+%if "%{_libdir}" != "%{_prefix}/lib"
+%{_prefix}/lib/tkConfig.sh
+%endif
+%{_libdir}/pkgconfig/*.pc
+%{_datadir}/%{name}%{major}/tkAppInit.c
+%{_mandir}/man3/*
+
+#--------------------------------------------------------------------
+
 %prep
-%autosetup -n %{dirname_} -p1
+%autosetup -p1 -n %{name}%{version}
 
 # Replace native icons.tcl - it contains  PNG data
 # obtained using old libpng and has problems with new libpng
@@ -67,10 +99,10 @@ This package contains development files for %{name}.
 cp -f %{SOURCE1} library
 
 %build
-cd unix
+pushd unix
 %config_update
-    autoconf
-    %configure \
+autoconf
+%configure \
 	--enable-threads \
 %ifnarch %{ix86}
 	--enable-64bit \
@@ -78,11 +110,10 @@ cd unix
 	--disable-rpath \
 	--with-tcl=%{_libdir}
 
-    %make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
-cd -
+%make_build CFLAGS="%{optflags}" TK_LIBRARY="%{_datadir}/%{name}%{major}"
+popd
 
 %install
-
 # If %{_libdir} is not %{_prefix}/lib, then define EXTRA_TCLLIB_FILES
 # which contains actual non-architecture-dependent tcl code.
 if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
@@ -125,27 +156,3 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 # (tpg) nuke rpath
 chrpath -d %{buildroot}%{_libdir}/libtk%{major}.so
 
-%files
-%{_bindir}/wish*
-%{_libdir}/%{name}%{major}
-%{_datadir}/%{name}%{major}
-%exclude %{_datadir}/%{name}%{major}/tkAppInit.c
-%{_mandir}/man1/*
-%{_mandir}/mann/*
-
-%files -n %{libname}
-%{_libdir}/lib*%{major}.so
-
-%files -n %{develname}
-%{_includedir}/*.h
-%dir %{_includedir}/tk-private
-%{_includedir}/tk-private/*
-%{_libdir}/libtk.so
-%{_libdir}/*.a
-%{_libdir}/tkConfig.sh
-%if "%{_libdir}" != "%{_prefix}/lib"
-%{_prefix}/lib/tkConfig.sh
-%endif
-%{_libdir}/pkgconfig/*.pc
-%{_datadir}/%{name}%{major}/tkAppInit.c
-%{_mandir}/man3/*
