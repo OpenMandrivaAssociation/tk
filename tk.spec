@@ -8,7 +8,7 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	9.0.0
+Version:	9.0.1
 Release:	1
 License:	BSD
 Group:		System/Libraries
