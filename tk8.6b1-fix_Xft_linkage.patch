@@ -1,6 +1,19 @@
---- tk8.6b2/unix/configure.in.Xft	2011-08-05 21:18:31.000000000 +0200
-+++ tk8.6b2/unix/configure.in	2012-04-20 19:17:21.127229457 +0200
-@@ -557,7 +557,7 @@ if test $tk_aqua = no; then
+diff -up tk9.0.0/unix/Makefile.in.3~ tk9.0.0/unix/Makefile.in
+--- tk9.0.0/unix/Makefile.in.3~	2025-02-11 02:23:39.603129325 +0100
++++ tk9.0.0/unix/Makefile.in	2025-02-11 02:24:01.731349071 +0100
+@@ -297,7 +297,7 @@ REZ_SWITCHES = @REZ_FLAGS@ -i $(GENERIC_
+ 
+ # support for Xft:
+ XFT_CFLAGS		= @XFT_CFLAGS@
+-XFT_LIBS		= @XFT_LIBS@
++XFT_LIBS		= @XFT_LIBS@ -lfontconfig
+ 
+ # support for libcups
+ CUPS_CFLAGS		= @CUPS_CFLAGS@
+diff -up tk9.0.0/unix/configure.ac.3~ tk9.0.0/unix/configure.ac
+--- tk9.0.0/unix/configure.ac.3~	2024-08-28 18:59:32.000000000 +0200
++++ tk9.0.0/unix/configure.ac	2025-02-11 02:23:39.602926813 +0100
+@@ -412,7 +412,7 @@ if test $tk_aqua = no; then
  	    tk_oldCFlags=$CFLAGS
  	    CFLAGS="$CFLAGS $XINCLUDES $XFT_CFLAGS"
  	    tk_oldLibs=$LIBS
@@ -9,7 +22,7 @@
  	    AC_CHECK_HEADER(X11/Xft/Xft.h, [], [
  		found_xft=no
  	    ],[#include <X11/Xlib.h>])
-@@ -569,7 +569,7 @@ if test $tk_aqua = no; then
+@@ -424,7 +424,7 @@ if test $tk_aqua = no; then
  	    tk_oldCFlags=$CFLAGS
  	    CFLAGS="$CFLAGS $XINCLUDES $XFT_CFLAGS"
  	    tk_oldLibs=$LIBS
@@ -18,14 +31,3 @@
  	    AC_CHECK_LIB(Xft, XftFontOpen, [], [
  		found_xft=no
  	    ])
---- tk8.6b2/unix/Makefile.in.Xft	2012-04-20 19:16:42.309228584 +0200
-+++ tk8.6b2/unix/Makefile.in	2012-04-20 19:16:42.348228584 +0200
-@@ -291,7 +291,7 @@ REZ_SWITCHES = @REZ_FLAGS@ -i $(GENERIC_
- 
- # support for Xft:
- XFT_CFLAGS		= @XFT_CFLAGS@
--XFT_LIBS		= @XFT_LIBS@
-+XFT_LIBS		= @XFT_LIBS@ -lfontconfig
- 
- #----------------------------------------------------------------
- # The information below is modified by the configure script when
