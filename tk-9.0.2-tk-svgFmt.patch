@@ -1,0 +1,151 @@
+diff -up tk9.0.2/generic/tkCmds.c.omv~ tk9.0.2/generic/tkCmds.c
+diff -up tk9.0.2/generic/ttk/ttkClamTheme.c.omv~ tk9.0.2/generic/ttk/ttkClamTheme.c
+--- tk9.0.2/generic/ttk/ttkClamTheme.c.omv~	2025-07-04 23:46:56.246618747 +0200
++++ tk9.0.2/generic/ttk/ttkClamTheme.c	2025-07-04 23:47:02.383284449 +0200
+@@ -507,7 +507,7 @@ static void IndicatorElementDraw(
+ 	/*
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
+diff -up tk9.0.2/generic/ttk/ttkDefaultTheme.c.omv~ tk9.0.2/generic/ttk/ttkDefaultTheme.c
+--- tk9.0.2/generic/ttk/ttkDefaultTheme.c.omv~	2025-07-04 23:47:07.095750868 +0200
++++ tk9.0.2/generic/ttk/ttkDefaultTheme.c	2025-07-04 23:47:12.328204297 +0200
+@@ -682,7 +682,7 @@ static void IndicatorElementDraw(
+ 	/*
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
+diff -up tk9.0.2/generic/ttk/ttkElements.c.omv~ tk9.0.2/generic/ttk/ttkElements.c
+--- tk9.0.2/generic/ttk/ttkElements.c.omv~	2025-07-04 23:46:36.002465668 +0200
++++ tk9.0.2/generic/ttk/ttkElements.c	2025-07-04 23:46:48.760306740 +0200
+@@ -866,7 +866,7 @@ static void IndicatorElementDraw(
+ 	/*
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
+@@ -1501,7 +1501,7 @@ static void SliderElementDraw(
+ 	/*
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
+diff -up tk9.0.2/library/demos/image2.tcl.omv~ tk9.0.2/library/demos/image2.tcl
+--- tk9.0.2/library/demos/image2.tcl.omv~	2025-07-04 23:48:43.116185572 +0200
++++ tk9.0.2/library/demos/image2.tcl	2025-07-04 23:49:00.416562474 +0200
+@@ -57,7 +57,7 @@ proc loadImage {w x y} {
+     set file [file join $dirName [$w.f.list get @$x,$y]]
+     set opts [list -file $file]
+     if {[string tolower [file extension $file]] eq ".svg"} {
+-	lappend opts -format $tk::svgFmt
++	lappend opts -format {}
+     } else {
+ 	lappend opts -format {}
+     }
+diff -up tk9.0.2/library/demos/mclist.tcl.omv~ tk9.0.2/library/demos/mclist.tcl
+--- tk9.0.2/library/demos/mclist.tcl.omv~	2025-07-04 23:48:25.650216505 +0200
++++ tk9.0.2/library/demos/mclist.tcl	2025-07-04 23:48:36.088365678 +0200
+@@ -63,7 +63,7 @@ proc createArrowImages {} {
+ 	set idx2 [expr {$idx1 + 6}]
+ 	set data [string replace $imgData $idx1 $idx2 $fgColor]
+ 
+-	image create photo ${dir}Arrow -format $::tk::svgFmt -data $data]
++	image create photo ${dir}Arrow -format {} -data $data]
+     }
+ }
+ 
+@@ -73,7 +73,7 @@ foreach event {<<ThemeChanged>> <<LightA
+ }
+ unset event
+ 
+-image create photo noArrow -format $tk::svgFmt -data {
++image create photo noArrow -format {} -data {
+     <?xml version="1.0" encoding="UTF-8"?>
+     <svg width="16" height="4" version="1.1" xmlns="http://www.w3.org/2000/svg">
+     </svg>
+diff -up tk9.0.2/library/demos/widget.omv~ tk9.0.2/library/demos/widget
+--- tk9.0.2/library/demos/widget.omv~	2025-07-04 23:48:10.200881047 +0200
++++ tk9.0.2/library/demos/widget	2025-07-04 23:48:20.575480555 +0200
+@@ -102,7 +102,7 @@ proc images {arg} {
+ 
+ 	switch $arg {
+ 	    create {
+-		image create photo ::img::$action -format $::tk::svgFmt \
++		image create photo ::img::$action -format {} \
+ 			-data $data
+ 	    }
+ 	    configure { ::img::$action configure -data $data }
+@@ -117,7 +117,7 @@ foreach event {<<ThemeChanged>> <<LightA
+ }
+ unset mainClass event
+ 
+-image create photo ::img::delete -format $::tk::svgFmt -data {
++image create photo ::img::delete -format {} -data {
+     <?xml version="1.0" encoding="UTF-8"?>
+     <svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" fill="#d00000"/>
+diff -up tk9.0.2/library/tkfbox.tcl.omv~ tk9.0.2/library/tkfbox.tcl
+--- tk9.0.2/library/tkfbox.tcl.omv~	2025-07-04 23:47:38.666556113 +0200
++++ tk9.0.2/library/tkfbox.tcl	2025-07-04 23:48:00.039796798 +0200
+@@ -69,7 +69,7 @@ namespace eval ::tk::dialog::file {
+     if {![info exists ::tk::Priv(updirImage)] ||
+ 	    $::tk::Priv(updirImage) ni [image names]} {
+ 	set ::tk::Priv(updirImage)  [image create photo \
+-		-format $::tk::svgFmt -data [UpdateUpdirImageData]]
++		-format {} -data [UpdateUpdirImageData]]
+ 
+ 	if {"TkFileDialog" ni [bindtags .]} {
+ 	    bindtags . [linsert [bindtags .] 1 TkFileDialog]
+@@ -84,12 +84,12 @@ namespace eval ::tk::dialog::file {
+     if {![info exists ::tk::Priv(folderImage)] ||
+ 	    $::tk::Priv(folderImage) ni [image names]} {
+ 	set ::tk::Priv(folderImage) [image create photo \
+-		-format $::tk::svgFmt -data $folderImageData]
++		-format {} -data $folderImageData]
+     }
+     if {![info exists ::tk::Priv(fileImage)] ||
+ 	    $::tk::Priv(fileImage) ni [image names]} {
+ 	set ::tk::Priv(fileImage)   [image create photo \
+-		-format $::tk::svgFmt -data $fileImageData]
++		-format {} -data $fileImageData]
+     }
+ }
+ 
+diff -up tk9.0.2/unix/tkUnixButton.c.omv~ tk9.0.2/unix/tkUnixButton.c
+--- tk9.0.2/unix/tkUnixButton.c.omv~	2025-07-04 23:47:25.497094051 +0200
++++ tk9.0.2/unix/tkUnixButton.c	2025-07-04 23:47:30.796614169 +0200
+@@ -320,7 +320,7 @@ TkpDrawCheckIndicator(
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+ 
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
+diff -up tk9.0.2/win/tkWinButton.c.omv~ tk9.0.2/win/tkWinButton.c
+--- tk9.0.2/win/tkWinButton.c.omv~	2025-07-04 23:46:15.947221878 +0200
++++ tk9.0.2/win/tkWinButton.c	2025-07-04 23:46:24.327942935 +0200
+@@ -485,7 +485,7 @@ TkpDrawIndicator(
+ 	 * Create an SVG photo image from svgDataCopy
+ 	 */
+ 
+-	cmdFmt = "image create photo %s -format $::tk::svgFmt -data {%s}";
++	cmdFmt = "image create photo %s -format {} -data {%s}";
+ 	scriptSize = strlen(cmdFmt) + strlen(imgName) + svgDataLen;
+ 	script = (char *)attemptckalloc(scriptSize);
+ 	if (script == NULL) {
