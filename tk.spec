@@ -8,7 +8,7 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	9.0.2
+Version:	9.0.3
 Release:	1
 License:	BSD
 Group:		System/Libraries
@@ -16,7 +16,6 @@ URL:		https://tcl.tk
 Source0:        https://downloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
 Source1:	icons.tcl
 Source2:	tk.rpmlintrc
-Patch0:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.12-make.patch
 Patch1:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.15-conf.patch
 # Fixes gitk screaming about tk::svgFmt being undefined
 Patch2:		tk-9.0.2-tk-svgFmt.patch
