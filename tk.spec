@@ -21,6 +21,9 @@ Patch1:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.15-conf.patc
 Patch2:		tk-9.0.2-tk-svgFmt.patch
 Patch4:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	make autoconf m4
 BuildRequires:	tcl-devel >= %(echo %{version} |cut -d. -f1-3)
 BuildRequires:	pkgconfig(x11)
