@@ -8,18 +8,18 @@
 
 Summary:	GUI toolkit for Tcl
 Name:		tk
-Version:	9.0.3
-Release:	2
+Version:	9.0.4
+Release:	1
 License:	BSD
 Group:		System/Libraries
 URL:		https://tcl.tk
 Source0:        https://downloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
 Source1:	icons.tcl
 Source2:	tk.rpmlintrc
-Patch1:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.15-conf.patch
+# dropped (no longer applies): Patch1:		https://src.fedoraproject.org/rpms/tk/raw/rawhide/f/tk-8.6.15-conf.patch
 # Fixes gitk screaming about tk::svgFmt being undefined
-Patch2:		tk-9.0.2-tk-svgFmt.patch
-Patch4:		tk8.6b1-fix_Xft_linkage.patch
+# dropped (no longer applies): Patch2:		tk-9.0.2-tk-svgFmt.patch
+# dropped (no longer applies): Patch4:		tk8.6b1-fix_Xft_linkage.patch
 Requires:	%{libname} = %{EVRD}
 BuildRequires:	automake
 BuildRequires:	libtool-base
@@ -90,7 +90,7 @@ This package contains development files for %{name}.
 #--------------------------------------------------------------------
 
 %prep
-%autosetup -p1 -n %{name}%{version}
+%autosetup -p1 -n tk9.0.4
 
 # Replace native icons.tcl - it contains  PNG data
 # obtained using old libpng and has problems with new libpng
