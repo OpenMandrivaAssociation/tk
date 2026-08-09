@@ -12,7 +12,7 @@ Version:	9.0.4
 Release:	1
 License:	BSD
 Group:		System/Libraries
-URL:		https://tcl.tk
+URL:		https://www.tcl-lang.org/
 Source0:        https://downloads.sourceforge.net/tcl/%{name}%{version}-src.tar.gz
 Source1:	icons.tcl
 Source2:	tk.rpmlintrc
